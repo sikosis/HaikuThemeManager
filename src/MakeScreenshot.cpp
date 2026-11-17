@@ -20,10 +20,6 @@
 #include <string.h>
 #include <malloc.h>
 
-// PRIVATE: in libzeta for now.
-extern status_t ScaleBitmap(const BBitmap& inBitmap, BBitmap& outBitmap);
-
-
 status_t
 MakeScreenshot(BBitmap **here)
 {
@@ -46,22 +42,16 @@ MakeScreenshot(BBitmap **here)
 		scaledBmp = new BBitmap(scaledBounds, B_BITMAP_ACCEPTS_VIEWS, B_RGB32/*shot->ColorSpace()*/);
 		err = scaledBmp->InitCheck();
 		if (!err) {
-			err = ENOSYS;
-#ifdef B_ZETA_VERSION
-			err = ScaleBitmap(*shot, *scaledBmp);
-#endif
-			if (err) {
-				// filtered scaling didn't work, do it manually
-				BView *v = new BView(scaledBounds, "scaleview", B_FOLLOW_NONE, 0);
-				scaledBmp->AddChild(v);
-				v->LockLooper();
-				v->DrawBitmap(shot);
-				v->Sync();
-				v->UnlockLooper();
-				scaledBmp->RemoveChild(v);
-				delete v;
-				err = B_OK;
-			}
+			BView *v = new BView(scaledBounds, "scaleview", B_FOLLOW_NONE, 0);
+			scaledBmp->AddChild(v);
+			v->LockLooper();
+			v->DrawBitmap(shot, shot->Bounds(), scaledBounds,
+				B_FILTER_BITMAP_BILINEAR);
+			v->Sync();
+			v->UnlockLooper();
+			scaledBmp->RemoveChild(v);
+			delete v;
+			err = B_OK;
 		}
 		delete shot;
 	}

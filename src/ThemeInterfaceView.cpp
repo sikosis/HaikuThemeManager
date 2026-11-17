@@ -12,25 +12,12 @@
 #include <File.h>
 #include <BeBuild.h>
 
-#ifdef __HAIKU__
 #include <locale/Catalog.h>
-#endif
 
-#ifdef B_ZETA_VERSION
-#include <add-ons/pref_app/PrefPanel.h>
-#include <locale/Locale.h>
-#include <Separator.h>
-#define B_TRANSLATE _T
-#else
 #define B_PREF_APP_ENABLE_REVERT 'zPAE'
 #define B_PREF_APP_SET_DEFAULTS 'zPAD'
 #define B_PREF_APP_REVERT 'zPAR'
 #define B_PREF_APP_ADDON_REF 'zPAA'
-#endif
-
-#ifndef B_TRANSLATE
-#define B_TRANSLATE(v) v
-#endif
 
 #undef B_TRANSLATION_CONTEXT
 #define B_TRANSLATION_CONTEXT "ThemeInterfaceView"
@@ -55,8 +42,6 @@
 #include <stdio.h>
 
 #include "UITheme.h"
-
-extern status_t ScaleBitmap(const BBitmap& inBitmap, BBitmap& outBitmap);
 
 /* gui */
 //#include "ThemeSelector.h"
@@ -449,11 +434,6 @@ ThemeInterfaceView::MessageReceived(BMessage *_msg)
 		
 		case skOnlineThemes:
 		{
-			/*
-			ZETA code:
-			be_roster->Launch( "application/x-vnd.Mozilla-Firefox", 1,
-				(char **)&skThemeURL);
-			*/
 			if (!be_roster->IsRunning(kHaikuDepotSig)) {
 				be_roster->Launch(kHaikuDepotSig);
 				snooze(1000000);

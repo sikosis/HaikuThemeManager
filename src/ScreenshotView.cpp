@@ -10,10 +10,6 @@
 #include <Debug.h>
 
 
-// PRIVATE: in libzeta for now.
-extern status_t ScaleBitmap(const BBitmap& inBitmap, BBitmap& outBitmap);
-
-
 ScreenshotView::ScreenshotView(BRect bounds, const char *name,
 						uint32 resizeMask,
 						uint32 flags)
@@ -46,13 +42,8 @@ ScreenshotView::UpdateScreenshot()
 	ClearViewBitmap();
 
 	if (fBitmap) {
-#ifdef __HAIKU__
 		SetViewBitmap(fBitmap, fBitmap->Bounds(), Bounds(), B_FOLLOW_ALL,
 			B_FILTER_BITMAP_BILINEAR);
-
-#else
-		SetViewBitmap(fBitmap, fBitmap->Bounds(), Bounds());
-#endif
 	}
 
 	Invalidate();
@@ -65,20 +56,5 @@ ScreenshotView::SetScreenshot(BBitmap *bitmap)
 	if (fBitmap)
 		delete fBitmap;
 	fBitmap = bitmap;
-
-#ifdef B_ZETA_VERSION
-	if (bitmap)
-	{
-		BBitmap *scaled = new BBitmap(Bounds(), B_RGB32);
-		status_t err = ENOSYS;
-		err = ScaleBitmap(*bitmap, *scaled);
-		if( err == B_OK ) {
-			fBitmap = scaled;
-			delete bitmap;
-		} else
-			delete scaled;
-	}
-#endif
-
 	UpdateScreenshot();
 }

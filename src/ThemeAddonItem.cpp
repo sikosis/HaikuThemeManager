@@ -9,23 +9,12 @@
 #include "UITheme.h"
 #include <BeBuild.h>
 
-#ifdef __HAIKU__
 #include <locale/Catalog.h>
-#endif
 
-#ifdef B_ZETA_VERSION
-#include <locale/Locale.h>
-#define B_TRANSLATE _T
-#else
 #define B_LANGUAGE_CHANGED '_BLC'
 #define B_PREF_APP_SET_DEFAULTS 'zPAD'
 #define B_PREF_APP_REVERT 'zPAR'
 #define B_PREF_APP_ADDON_REF 'zPAA'
-#endif
-
-#ifndef B_TRANSLATE
-#define B_TRANSLATE(v) v
-#endif
 
 #undef B_TRANSLATION_CONTEXT
 #define B_TRANSLATION_CONTEXT "ThemeAddonItem"

@@ -72,39 +72,7 @@ SoundsThemesAddon::Description()
 status_t
 SoundsThemesAddon::RunPreferencesPanel()
 {
-	status_t err;
-
-	// Haiku
-	if (be_roster->Launch("application/x-vnd.Haiku-Sounds") == B_OK)
-		return B_OK;
-
-	// BeOS
-	entry_ref ref;
-	BEntry ent;
-	err = ent.SetTo("/boot/beos/preferences/Sounds");
-	if (!err) {
-		err = ent.GetRef(&ref);
-		if (!err) {
-			err = be_roster->Launch(&ref);
-		}
-	}
-	if (!err)
-		return B_OK;
-
-	// ZETA
-	err = ent.SetTo("/system/add-ons/Preferences/Sounds");
-	if (!err) {
-		err = ent.GetRef(&ref);
-		if (!err) {
-			err = be_roster->Launch(&ref);
-			if (err) {
-				BMessage msg(B_REFS_RECEIVED);
-				msg.AddRef("refs", &ref);
-				be_app_messenger.SendMessage(&msg);
-			}
-		}
-	}
-	return err;
+	return be_roster->Launch("application/x-vnd.Haiku-Sounds");
 }
 
 

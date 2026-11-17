@@ -39,9 +39,6 @@
 
 extern status_t MakeScreenshot(BBitmap **here);
 
-// addons used in the prefs in Zeta (some were disabled)
-//#define ZETA_ADDONS
-
 //#define DEBUG_TM
 #ifdef DEBUG_TM
 #define FENTRY PRINT(("ThemeManager::%s()\n", __FUNCTION__))
@@ -197,7 +194,6 @@ ThemeManager::LoadAddons()
 #endif
 	ta = instantiate_themes_addon_window_decor();
 	ADDA(ta);
-#ifndef ZETA_ADDONS
 	ta = instantiate_themes_addon_screensaver();
 	ADDA(ta);
 	ta = instantiate_themes_addon_sounds();
@@ -209,14 +205,11 @@ ThemeManager::LoadAddons()
 	ADDA(ta);
 	ta = instantiate_themes_addon_winamp_skin();
 	ADDA(ta);
-#endif
 	// dev tools
 	ta = instantiate_themes_addon_beide();
 	ADDA(ta);
-#ifndef ZETA_ADDONS
 	ta = instantiate_themes_addon_eddie();
 	ADDA(ta);
-#endif
 	ta = instantiate_themes_addon_pe();
 	ADDA(ta);
 

@@ -96,44 +96,7 @@ BackgroundThemesAddon::Description()
 status_t
 BackgroundThemesAddon::RunPreferencesPanel()
 {
-	if (be_roster->Launch("application/x-vnd.Haiku-Backgrounds") == B_OK)
-		return B_OK;
-	if (be_roster->Launch("application/x-vnd.Be-Backgrounds") == B_OK)
-		return B_OK;
-
-	status_t err;
-	entry_ref ref;
-	BEntry ent;
-
-	BPath p;
-	err = find_directory(B_SYSTEM_PREFERENCES_DIRECTORY, &p);
-	if (err == B_OK) {
-		p.Append("Backgrounds");
-		err = ent.SetTo(p.Path());
-	}
-	if (err == B_OK) {
-		err = ent.GetRef(&ref);
-		if (!err) {
-			err = be_roster->Launch(&ref);
-		}
-	}
-	if (err == B_OK)
-		return B_OK;
-
-	// ZETA: single-Prefs with addons...
-	err = ent.SetTo("/system/add-ons/Preferences/Backgrounds");
-	if (err == B_OK) {
-		err = ent.GetRef(&ref);
-		if (!err) {
-			err = be_roster->Launch(&ref);
-			if (err) {
-				BMessage msg(B_REFS_RECEIVED);
-				msg.AddRef("refs", &ref);
-				be_app_messenger.SendMessage(&msg);
-			}
-		}
-	}
-	return err;
+	return be_roster->Launch("application/x-vnd.Haiku-Backgrounds");
 }
 
 

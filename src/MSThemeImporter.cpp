@@ -447,19 +447,8 @@ MSThemeImporter::ImportNextTheme(BMessage **theme)
 		} else if (section == "[Metrics]") {
 			;
 		} else if (section == "[VisualStyles]") {
-			if (!key.ICompare("Path")) {
-				if (value.IFindFirst("luna.msstyles") > -1) {
-					// map Zeta decor
-					themeWindowDecor = "Redmond";
-				} else if (value.IFindFirst("aero.msstyles") > -1) {
-					;
-				} // else use Win2k
-			}
-			if (!key.ICompare("ColorStyle")) {
-					// use the greyish verison
-					if (value == "Metallic" && themeWindowDecor == "Redmond")
-						themeWindowDecor = "Seattle";
-			}
+			// Windows visual styles do not have a Haiku decorator equivalent.
+			continue;
 		} else if (section.IFindFirst("AppEvents\\Schemes\\Apps") > -1) {
 			if (key != "DefaultValue")
 				continue;

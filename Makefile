@@ -22,8 +22,6 @@ SRCS := \
 	src/ViewItem.cpp \
 	src/addons/BackgroundsAddon.cpp \
 	src/addons/BeIDEAddon.cpp \
-	src/addons/BeOSWindowDecorAddon.cpp \
-	src/addons/DanoUISettingsAddon.cpp \
 	src/addons/DeskbarAddon.cpp \
 	src/addons/EddieAddon.cpp \
 	src/addons/HaikuUISettingsAddon.cpp \
@@ -45,7 +43,7 @@ SYSTEM_INCLUDE_PATHS :=
 LOCAL_INCLUDE_PATHS := src
 
 OPTIMIZE := SOME
-DEFINES := SINGLE_BINARY _ZETA_TS_FIND_DIR_
+DEFINES := SINGLE_BINARY
 WARNINGS := ALL
 SYMBOLS :=
 DEBUGGER :=
