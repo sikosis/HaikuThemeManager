@@ -691,6 +691,7 @@ ThemeInterfaceView::SaveSelected()
 	status_t err;
 	ThemeManager* tman = GetThemeManager();
 	int32 id;
+	BBitmap *screenshot = NULL;
 	ThemeItem *item;
 	BString message;
 	// find selected theme
@@ -724,9 +725,21 @@ ThemeInterfaceView::SaveSelected()
 	err = tman->UpdateTheme(id);
 	if (err)
 		return AError(__FUNCTION__, err);
+
+	err = tman->ThemeScreenShot(id, &screenshot);
+	if (err == B_OK) {
+		delete screenshot;
+		screenshot = NULL;
+	} else {
+		err = tman->MakeThemeScreenShot(id);
+		if (err)
+			return AError(__FUNCTION__, err);
+	}
+
 	err = tman->SaveTheme(id);
 	if (err)
 		return AError(__FUNCTION__, err);
+	ThemeSelected();
 
 	message.SetToFormat(B_TRANSLATE("The current settings were saved to “%s”."),
 		item->Text());
@@ -853,7 +866,6 @@ ThemeInterfaceView::ThemeSelected()
 	if (sshot == NULL) 
 	{
 		SetScreenshot(NULL);
-		fprintf(stderr, "ThemeManager: no screenshot; error 0x%08lx\n", err);
 
 		while(true == fScreenshotText->IsHidden())
 			fScreenshotText->Show();
