@@ -44,6 +44,20 @@ provided by Haiku. **Dark Mode** is a read-only theme compiled into the
 application from the supplied Haiku configuration and screenshot. It does not
 depend on a theme already being present in the user's settings directory.
 
+The application also embeds the Haiku-compatible **Champion**, **Haiku**,
+**Roired**, **RoiredDark**, **Stargate Atlantis**, **Stargate Atlantis
+Ancient**, **gonxish** and **redmond** definitions from
+[mmuman/HaikuThemes](https://github.com/mmuman/HaikuThemes). Historical themes
+containing ZETA references or `/boot/beos` paths are intentionally excluded.
+Some upstream themes refer to wallpapers that are not supplied by that
+repository; their remaining colours and settings are still available.
+
+The imported repository does not state a licence. See
+[`resources/ImportedThemes/UPSTREAM.md`](resources/ImportedThemes/UPSTREAM.md)
+before redistributing a packaged build.
+
+The application MIME signature is `application/x-vnd.hThemeManager`.
+
 ## Heritage and licence
 
 Theme Manager was created by Francois Revol and distributed under the MIT

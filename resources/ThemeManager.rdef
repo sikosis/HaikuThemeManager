@@ -1,24 +1,39 @@
 
-resource(1, "BEOS:APP_SIG") #'MIMS' "application/x-vnd.mmu_man-ThemeManager";
+resource(1, "BEOS:APP_SIG") #'MIMS' "application/x-vnd.hThemeManager";
 
 resource app_version {
 	major      = 0,
-	middle     = 2,
+	middle     = 3,
 	minor      = 0,
 	variety    = B_APPV_ALPHA,
 	internal   = 0,
-	short_info = "Haiku Theme Manager 0.2",
+	short_info = "Haiku Theme Manager 0.3",
 	long_info  = "Haiku Theme Manager ©2000-2026 Francois Revol and contributors."
 };
 
 resource app_flags B_SINGLE_LAUNCH;
 
 resource(1, "BEOS:FILE_TYPES") message {
-	"types" = "text/x-vnd.mmu_man-Theme"
+	"types" = "text/x-vnd.hThemeManager-Theme"
 };
 
 resource(200, "dark_mode_theme") #'HTHM' import "DarkMode.theme";
 resource(201, "dark_mode_screenshot") #'PNG ' import "DarkMode.png";
+resource(210, "upstream_champion_theme") #'HTHM' import "ImportedThemes/Champion/Theme";
+resource(211, "upstream_champion_screenshot") #'PNG ' import "ImportedThemes/Champion/screenshot.png";
+resource(212, "upstream_haiku_theme") #'HTHM' import "ImportedThemes/Haiku/Theme";
+resource(213, "upstream_roired_theme") #'HTHM' import "ImportedThemes/Roired/Theme";
+resource(214, "upstream_roired_screenshot") #'PNG ' import "ImportedThemes/Roired/screenshot.png";
+resource(215, "upstream_roired_dark_theme") #'HTHM' import "ImportedThemes/RoiredDark/Theme";
+resource(216, "upstream_roired_dark_screenshot") #'PNG ' import "ImportedThemes/RoiredDark/screenshot.png";
+resource(217, "upstream_stargate_atlantis_theme") #'HTHM' import "ImportedThemes/Stargate_Atlantis/Theme";
+resource(218, "upstream_stargate_atlantis_screenshot") #'PNG ' import "ImportedThemes/Stargate_Atlantis/screenshot.png";
+resource(219, "upstream_stargate_ancient_theme") #'HTHM' import "ImportedThemes/Stargate_Atlantis_Ancient/Theme";
+resource(220, "upstream_stargate_ancient_screenshot") #'PNG ' import "ImportedThemes/Stargate_Atlantis_Ancient/screenshot.png";
+resource(221, "upstream_gonxish_theme") #'HTHM' import "ImportedThemes/gonxish/Theme";
+resource(222, "upstream_gonxish_screenshot") #'PNG ' import "ImportedThemes/gonxish/screenshot.png";
+resource(223, "upstream_redmond_theme") #'HTHM' import "ImportedThemes/redmond/Theme";
+resource(224, "upstream_redmond_screenshot") #'PNG ' import "ImportedThemes/redmond/screenshot.png";
 
 //#ifdef HAIKU_TARGET_PLATFORM_HAIKU
 

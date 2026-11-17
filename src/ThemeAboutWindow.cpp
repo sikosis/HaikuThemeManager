@@ -12,7 +12,7 @@
 #include <StringView.h>
 
 static BString appVersion() {
-	BString version("Version 0.2");
+	BString version("Version 0.3");
 	app_info application_info;
 	if (be_app->GetAppInfo(&application_info) != B_OK)
 		return version;

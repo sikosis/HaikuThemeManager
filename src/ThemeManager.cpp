@@ -46,9 +46,29 @@ extern status_t MakeScreenshot(BBitmap **here);
 static const type_code kBuiltInThemeResourceType = 'HTHM';
 static const type_code kPngResourceType = 'PNG ';
 static const char *kBuiltInThemeField = "htm:built_in_theme";
-static const char *kDarkModeIdentifier = "dark_mode";
-static const char *kDarkModeThemeResource = "dark_mode_theme";
-static const char *kDarkModeScreenshotResource = "dark_mode_screenshot";
+
+struct BuiltInThemeResource {
+	const char *identifier;
+	const char *themeResource;
+	const char *screenshotResource;
+};
+
+static const BuiltInThemeResource kBuiltInThemes[] = {
+	{"dark_mode", "dark_mode_theme", "dark_mode_screenshot"},
+	{"upstream_champion", "upstream_champion_theme", "upstream_champion_screenshot"},
+	{"upstream_haiku", "upstream_haiku_theme", NULL},
+	{"upstream_roired", "upstream_roired_theme", "upstream_roired_screenshot"},
+	{"upstream_roired_dark", "upstream_roired_dark_theme", "upstream_roired_dark_screenshot"},
+	{"upstream_stargate_atlantis", "upstream_stargate_atlantis_theme",
+		"upstream_stargate_atlantis_screenshot"},
+	{"upstream_stargate_ancient", "upstream_stargate_ancient_theme",
+		"upstream_stargate_ancient_screenshot"},
+	{"upstream_gonxish", "upstream_gonxish_theme", "upstream_gonxish_screenshot"},
+	{"upstream_redmond", "upstream_redmond_theme", "upstream_redmond_screenshot"}
+};
+
+static const size_t kBuiltInThemeCount
+	= sizeof(kBuiltInThemes) / sizeof(kBuiltInThemes[0]);
 
 //#define DEBUG_TM
 #ifdef DEBUG_TM
@@ -542,9 +562,6 @@ ThemeManager::LoadThemes()
 status_t
 ThemeManager::LoadBuiltInThemes()
 {
-	if (FindTheme("Dark Mode") >= 0)
-		return B_OK;
-
 	app_info application_info;
 	status_t err = be_app->GetAppInfo(&application_info);
 	if (err != B_OK)
@@ -559,28 +576,37 @@ ThemeManager::LoadBuiltInThemes()
 	if (err != B_OK)
 		return err;
 
-	size_t resource_size = 0;
-	const void *resource_data = resources.LoadResource(kBuiltInThemeResourceType,
-		kDarkModeThemeResource, &resource_size);
-	if (resource_data == NULL || resource_size == 0)
-		return B_NAME_NOT_FOUND;
+	int32 loaded_count = 0;
+	for (size_t index = 0; index < kBuiltInThemeCount; index++) {
+		size_t resource_size = 0;
+		const void *resource_data = resources.LoadResource(kBuiltInThemeResourceType,
+			kBuiltInThemes[index].themeResource, &resource_size);
+		if (resource_data == NULL || resource_size == 0)
+			continue;
 
-	BMemoryIO theme_stream(resource_data, resource_size);
-	BMessage *theme = NULL;
-	err = ParseMessageFromStream(&theme, theme_stream);
-	if (err != B_OK)
-		return err;
-	if (theme == NULL)
-		return B_BAD_DATA;
+		BMemoryIO theme_stream(resource_data, resource_size);
+		BMessage *theme = NULL;
+		err = ParseMessageFromStream(&theme, theme_stream);
+		if (err != B_OK || theme == NULL) {
+			delete theme;
+			continue;
+		}
 
-	err = theme->AddString(kBuiltInThemeField, kDarkModeIdentifier);
-	if (err != B_OK) {
-		delete theme;
-		return err;
+		err = theme->AddString(kBuiltInThemeField,
+			kBuiltInThemes[index].identifier);
+		if (err != B_OK) {
+			delete theme;
+			continue;
+		}
+
+		err = AddTheme(theme);
+		if (err == B_OK)
+			loaded_count++;
+		else
+			delete theme;
 	}
 
-	fThemeList.AddItem(theme);
-	return B_OK;
+	return loaded_count > 0 ? B_OK : B_NAME_NOT_FOUND;
 }
 //---------------------------------------------------------------------------------------------------------------------------------//
 
@@ -1351,8 +1377,17 @@ ThemeManager::ThemeScreenShot(int32 id, BBitmap **copyto)
 	if (!copyto)
 		return EINVAL;
 	BString built_in_identifier;
-	if (theme->FindString(kBuiltInThemeField, &built_in_identifier) == B_OK
-		&& built_in_identifier == kDarkModeIdentifier) {
+	if (theme->FindString(kBuiltInThemeField, &built_in_identifier) == B_OK) {
+		const char *screenshot_resource = NULL;
+		for (size_t index = 0; index < kBuiltInThemeCount; index++) {
+			if (built_in_identifier == kBuiltInThemes[index].identifier) {
+				screenshot_resource = kBuiltInThemes[index].screenshotResource;
+				break;
+			}
+		}
+		if (screenshot_resource == NULL)
+			return B_NAME_NOT_FOUND;
+
 		app_info application_info;
 		err = be_app->GetAppInfo(&application_info);
 		if (err != B_OK)
@@ -1366,7 +1401,7 @@ ThemeManager::ThemeScreenShot(int32 id, BBitmap **copyto)
 			return err;
 		size_t resource_size = 0;
 		const void *resource_data = resources.LoadResource(kPngResourceType,
-			kDarkModeScreenshotResource, &resource_size);
+			screenshot_resource, &resource_size);
 		if (resource_data == NULL || resource_size == 0)
 			return B_NAME_NOT_FOUND;
 		BMemoryIO screenshot_stream(resource_data, resource_size);

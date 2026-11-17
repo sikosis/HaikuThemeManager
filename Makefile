@@ -50,7 +50,9 @@ DEBUGGER :=
 COMPILER_FLAGS := -std=c++17
 LINKER_FLAGS :=
 APP_VERSION :=
-EXTRA_DEPS := resources/DarkMode.theme resources/DarkMode.png
+EXTRA_DEPS := resources/DarkMode.theme resources/DarkMode.png \
+	$(wildcard resources/ImportedThemes/*/Theme) \
+	$(wildcard resources/ImportedThemes/*/screenshot.png)
 DRIVER_PATH :=
 OBJ_DIR :=
 TARGET_DIR :=
@@ -64,7 +66,7 @@ BUILD_DEBUG :=
 CHECK_MEM :=
 CHATTY :=
 
-APP_MIME_SIG := application/x-vnd.mmu_man-ThemeManager
+APP_MIME_SIG := application/x-vnd.hThemeManager
 LOCALES := ca cs de en en_GB es fr fur hr id it pt ro sv tr uk
 
 include $(BUILDHOME)/etc/makefile-engine

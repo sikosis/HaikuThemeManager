@@ -12,7 +12,7 @@
 #include "ThemeAboutWindow.h"
 #include "ThemesWindow.h"
 
-const char *kThemesAppSignature = "application/x-vnd.mmu_man-ThemeManager";
+const char *kThemesAppSignature = "application/x-vnd.hThemeManager";
 
 
 ThemesApp::ThemesApp():
