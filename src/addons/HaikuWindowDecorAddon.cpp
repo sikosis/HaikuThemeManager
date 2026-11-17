@@ -8,7 +8,7 @@
  */
 
 #include <BeBuild.h>
-#ifdef B_HAIKU_VERSION_1
+#ifdef __HAIKU__
 
 #include <Alert.h>
 #include <Application.h>
@@ -305,4 +305,4 @@ instantiate_themes_addon()
 }
 
 
-#endif /* B_BEOS_VERSION_DANO */
+#endif /* __HAIKU__ */

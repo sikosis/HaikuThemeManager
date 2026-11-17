@@ -38,6 +38,7 @@ SRCS := \
 RDEFS := resources/ThemeManager.rdef
 RSRCS :=
 
+STDCPPLIBS ?= stdc++
 LIBS := be media textencoding translation localestub $(STDCPPLIBS)
 LIBPATHS :=
 SYSTEM_INCLUDE_PATHS :=
