@@ -17,6 +17,9 @@ resource(1, "BEOS:FILE_TYPES") message {
 	"types" = "text/x-vnd.mmu_man-Theme"
 };
 
+resource(200, "dark_mode_theme") #'HTHM' import "DarkMode.theme";
+resource(201, "dark_mode_screenshot") #'PNG ' import "DarkMode.png";
+
 //#ifdef HAIKU_TARGET_PLATFORM_HAIKU
 
 resource vector_icon {

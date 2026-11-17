@@ -66,6 +66,7 @@ status_t	GetNames(BMessage &names);
 	/* Theme enumeration - INTERNAL */
 	
 status_t	LoadThemes();
+status_t	LoadBuiltInThemes();
 status_t	AddTheme(BMessage *theme);
 status_t	UnloadThemes(); /* just for cleanup */
 int32		CountThemes();

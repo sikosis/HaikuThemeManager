@@ -1,0 +1,254 @@
+// new BMessage
+BMessage('ZThm') {
+	z:theme:infos = BMessage(0x00000000) {
+		z:theme:name = string("Dark Mode", 9 bytes)
+		z:theme:description = string("Built-in Dark Mode captured from the supplied Haiku settings.", 61 bytes)
+		z:theme:keywords = string("Haiku, dark, current settings", 29 bytes)
+		z:theme:screenshot = string("screenshot.png", 14 bytes)
+	}
+	// Desktop backgrounds and color; please respect count and ordering of all fields!
+	be:bgndimginfo = BMessage(0x00000000) {
+		// If true, use desktop color as icon text background
+		be:bgndimginfoerasetext[0] = bool(false)
+		be:bgndimginfoerasetext[1] = bool(false)
+		be:bgndimginfoerasetext[2] = bool(false)
+		be:bgndimginfoerasetext[3] = bool(false)
+		be:bgndimginfoerasetext[4] = bool(false)
+		be:bgndimginfoerasetext[5] = bool(false)
+		be:bgndimginfoerasetext[6] = bool(false)
+		be:bgndimginfoerasetext[7] = bool(false)
+		be:bgndimginfoerasetext[8] = bool(false)
+		// Actual backdrop image file
+		be:bgndimginfopath[0] = string("/boot/system/data/artwork/HAIKU logo - white on blue - big.png", 62 bytes)
+		be:bgndimginfopath[1] = string("/boot/home/Backgrounds/paris1.png", 33 bytes)
+		be:bgndimginfopath[2] = string("/boot/home/Backgrounds/n-himalaya1.png", 38 bytes)
+		be:bgndimginfopath[3] = string("/boot/home/Backgrounds/mexico2.png", 34 bytes)
+		be:bgndimginfopath[4] = string("/boot/home/Backgrounds/n-himalaya1.png", 38 bytes)
+		be:bgndimginfopath[5] = string("/boot/home/Backgrounds/n-crater1.png", 36 bytes)
+		be:bgndimginfopath[6] = string("/boot/home/Backgrounds/80sshore1.png", 36 bytes)
+		be:bgndimginfopath[7] = string("/boot/home/Backgrounds/himalaya2.png", 36 bytes)
+		be:bgndimginfopath[8] = string("/boot/home/Backgrounds/garden2.png", 34 bytes)
+		// Workspaces each backdrop apply to
+		be:bgndimginfoworkspaces[0] = int32(4294967040 or 0xffffff00)
+		be:bgndimginfoworkspaces[1] = int32(1 or 0x1)
+		be:bgndimginfoworkspaces[2] = int32(8 or 0x8)
+		be:bgndimginfoworkspaces[3] = int32(4 or 0x4)
+		be:bgndimginfoworkspaces[4] = int32(2 or 0x2)
+		be:bgndimginfoworkspaces[5] = int32(16 or 0x10)
+		be:bgndimginfoworkspaces[6] = int32(32 or 0x20)
+		be:bgndimginfoworkspaces[7] = int32(64 or 0x40)
+		be:bgndimginfoworkspaces[8] = int32(128 or 0x80)
+		// Origin point for mode 0
+		be:bgndimginfooffset[0] = BPoint(416.0, 548.0)
+		be:bgndimginfooffset[1] = BPoint(0.0, 0.0)
+		be:bgndimginfooffset[2] = BPoint(0.0, 0.0)
+		be:bgndimginfooffset[3] = BPoint(0.0, 0.0)
+		be:bgndimginfooffset[4] = BPoint(0.0, 0.0)
+		be:bgndimginfooffset[5] = BPoint(416.0, 548.0)
+		be:bgndimginfooffset[6] = BPoint(416.0, 548.0)
+		be:bgndimginfooffset[7] = BPoint(416.0, 548.0)
+		be:bgndimginfooffset[8] = BPoint(416.0, 548.0)
+		// image mode: 0=use_origin, 1=centered, 2=scaled, 3=tiled
+		be:bgndimginfomode[0] = int32(0 or (nil))
+		be:bgndimginfomode[1] = int32(2 or 0x2)
+		be:bgndimginfomode[2] = int32(2 or 0x2)
+		be:bgndimginfomode[3] = int32(2 or 0x2)
+		be:bgndimginfomode[4] = int32(2 or 0x2)
+		be:bgndimginfomode[5] = int32(2 or 0x2)
+		be:bgndimginfomode[6] = int32(2 or 0x2)
+		be:bgndimginfomode[7] = int32(2 or 0x2)
+		be:bgndimginfomode[8] = int32(2 or 0x2)
+		be:bgndimginfoset[0] = int32(0 or (nil))
+		be:bgndimginfoset[1] = int32(0 or (nil))
+		be:bgndimginfoset[2] = int32(0 or (nil))
+		be:bgndimginfoset[3] = int32(0 or (nil))
+		be:bgndimginfoset[4] = int32(0 or (nil))
+		be:bgndimginfoset[5] = int32(0 or (nil))
+		be:bgndimginfoset[6] = int32(0 or (nil))
+		be:bgndimginfoset[7] = int32(0 or (nil))
+		be:bgndimginfoset[8] = int32(0 or (nil))
+		// one per workspace, up to the last changing one
+		be:desktop_color[0] = rgb_color(0,0,0,255)
+		be:desktop_color[1] = rgb_color(51,102,152,255)
+	}
+	// Deskbar position
+	deskbar_settings = BMessage(0x00000000) {
+		// Deskbar on-screen position
+		db:location = int32(3 or 0x3)
+		// Deskbar is expanded
+		db:expanded = bool(true)
+	}
+	// UI Settings
+	ui_settings = BMessage(0x00000000) {
+		// Panel Background
+		be:c:PanBg = rgb_color(54,60,66,255)
+		// Panel Text
+		be:c:PanTx = rgb_color(253,253,253,255)
+		// Document Background
+		be:c:DocBg = rgb_color(0,0,0,255)
+		// Document Text
+		be:c:DocTx = rgb_color(234,234,234,255)
+		// Control Background
+		be:c:CtlBg = rgb_color(86,91,96,255)
+		// Control Text
+		be:c:CtlTx = rgb_color(230,230,230,255)
+		// Control Border
+		be:c:CtlBr = rgb_color(157,159,162,255)
+		// Control Highlight
+		be:c:CtlHg = rgb_color(102,152,203,255)
+		// Control Mark
+		h:c:CtlMk = rgb_color(27,82,140,255)
+		// Navigation Base
+		be:c:NavBs = rgb_color(0,0,229,255)
+		// Navigation Pulse
+		be:c:NavPl = rgb_color(0,0,0,255)
+		// Shine
+		be:c:Shine = rgb_color(255,255,255,255)
+		// Shadow
+		be:c:Shadow = rgb_color(0,0,0,255)
+		// ToolTip Background
+		be:c:TipBg = rgb_color(255,255,216,255)
+		// ToolTip Text
+		be:c:TipTx = rgb_color(0,0,0,255)
+		// Menu Background
+		be:c:MenBg = rgb_color(54,60,66,255)
+		// Menu Selected Background
+		be:c:MenSBg = rgb_color(94,99,103,255)
+		// Menu Item Text
+		be:c:MenTx = rgb_color(255,255,255,255)
+		// Menu Selected Item Text
+		be:c:MenSTx = rgb_color(255,255,255,255)
+		// Menu Selected Border
+		be:c:MenSBr = rgb_color(0,0,0,255)
+		// Success
+		be:c:Success = rgb_color(46,204,64,255)
+		// Failure
+		be:c:Failure = rgb_color(255,65,54,255)
+		// Window Tab Background
+		h:c:WinTabBg = rgb_color(255,203,0,255)
+		// Window Tab Text
+		h:c:WinTabTx = rgb_color(0,0,0,255)
+		// Inactive Window Tab Background
+		h:c:InWinTabBg = rgb_color(136,139,143,255)
+		// Inactive Window Tab Text
+		h:c:InWinTabTx = rgb_color(255,255,255,255)
+		// Window Border
+		h:c:WinBr = rgb_color(104,108,113,255)
+		// Inactive Window Border
+		h:c:InWinBr = rgb_color(136,139,143,255)
+		// List Background
+		h:c:LstBg = rgb_color(0,0,0,255)
+		// List Selected Background
+		h:c:LstSBg = rgb_color(100,104,109,255)
+		// List Item Text
+		h:c:LstTx = rgb_color(255,255,255,255)
+		// List Selected Item Text
+		h:c:LstSTx = rgb_color(255,255,255,255)
+		// Scrollbar Thumb
+		h:c:SbThb = rgb_color(86,91,96,255)
+		// System Plain
+		be:f:be_plain_font = BFont(Noto Sans/Regular/12.00, shear=90.00, rot=0.00, height=12.83+3.52+0.00)
+		// System Bold
+		be:f:be_bold_font = BFont(Noto Sans/Bold/12.00, shear=90.00, rot=0.00, height=12.83+3.52+0.00)
+		// System Fixed
+		be:f:be_fixed_font = BFont(Noto Sans Mono/Regular/12.00, shear=90.00, rot=0.00, height=12.83+3.52+0.00)
+		// Show Menu Triggers
+		be:MenTrig = bool(false)
+		// Menu Separator
+		be:MenSep = int32(0 or (nil))
+		// Menu Item Text
+		be:f:MenTx = BFont(Noto Sans/Regular/12.00, shear=90.00, rot=0.00, height=12.83+3.52+0.00)
+	}
+	// Window decorations and scrollbars
+	window_decorations = BMessage(0x00000000) {
+		// Window decor
+		window:decor = string("Default", 7 bytes)
+		// Window decor parameters
+		window:decor_globals = BMessage(0x00000000) {
+			// Window decor parameters
+			window:decor_globals = BMessage(0x00000000) {
+				f:Inactive Title = rgb_color(255,255,255,255)
+				f:Active Title = rgb_color(255,255,255,255)
+			}
+		}
+	}
+	// Screensaver settings
+	screensaver_settings = BMessage(0x00000000) {
+		// Screensaver active module
+		screensaver:modulename = string("ttfx-time", 9 bytes)
+		// Screensaver active module settings
+		screensaver:modulesettings = BMessage(0x00000000) {
+			effect_interval = int32(16 or 0x10)
+			transition_duration = int32(3 or 0x3)
+			show_seconds = bool(false)
+			use_24_hour_time = bool(true)
+			randomise_effects = bool(true)
+			show_effect_name = bool(false)
+		}
+	}
+	// Sounds Settings
+	sounds_settings = BMessage(0x00000000) {
+		Beep = BMessage('SndI') {
+		}
+		Error alert = BMessage('SndI') {
+		}
+		Important alert = BMessage('SndI') {
+		}
+		Information alert = BMessage('SndI') {
+		}
+		Key down = BMessage('SndI') {
+		}
+		Key repeat = BMessage('SndI') {
+		}
+		Key up = BMessage('SndI') {
+		}
+		Mouse down = BMessage('SndI') {
+		}
+		Mouse up = BMessage('SndI') {
+		}
+		Notification error = BMessage('SndI') {
+		}
+		Notification important = BMessage('SndI') {
+		}
+		Notification information = BMessage('SndI') {
+		}
+		Notification progress = BMessage('SndI') {
+		}
+		Startup = BMessage('SndI') {
+		}
+		Window activated = BMessage('SndI') {
+		}
+		Window close = BMessage('SndI') {
+		}
+		Window minimized = BMessage('SndI') {
+		}
+		Window open = BMessage('SndI') {
+		}
+		Window restored = BMessage('SndI') {
+		}
+		Window zoomed = BMessage('SndI') {
+		}
+	}
+	// Terminal Preferences
+	terminal_prefs = BMessage(0x00000000) {
+		// Terminal column count
+		term:cols = int32(139 or 0x8b)
+		// Terminal row count
+		term:rows = int32(26 or 0x1a)
+		// Terminal background color
+		term:c:bg = rgb_color(53,58,68,255)
+		// Terminal foreground color
+		term:c:fg = rgb_color(217,217,217,255)
+		// Terminal cursor background color
+		term:c:curbg = rgb_color(255,203,0,255)
+		// Terminal cursor foreground color
+		term:c:curfg = rgb_color(255,255,255,255)
+		// Terminal selection background color
+		term:c:selbg = rgb_color(217,217,217,255)
+		// Terminal selection foreground color
+		term:c:selfg = rgb_color(53,58,68,255)
+	}
+	// CLAmp/SoundPlay Skin Settings
+	winamp_skin_settings = BMessage(0x00000000) {
+	}
+}

@@ -505,17 +505,6 @@ ThemeInterfaceView::_ThemeListPopulator()
 
 	ThemeManager* tman = GetThemeManager();
 	tman->LoadThemes();
-	if (tman->FindTheme("Dark Mode") < 0) {
-		int32 dark_mode_id = tman->MakeTheme();
-		if (dark_mode_id >= 0
-			&& tman->SetThemeName(dark_mode_id, "Dark Mode") == B_OK
-			&& tman->SetThemeDescription(dark_mode_id,
-				"The Haiku settings captured when Dark Mode was first created.") == B_OK
-			&& tman->SetThemeKeywords(dark_mode_id,
-				"Haiku, dark, current settings") == B_OK) {
-			tman->SaveTheme(dark_mode_id, true);
-		}
-	}
 
 	count = tman->CountThemes();
 	

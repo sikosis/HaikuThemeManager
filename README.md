@@ -40,10 +40,9 @@ historical application.
 ## Included themes
 
 **Default** is a read-only system theme that restores the standard values
-provided by Haiku. **Dark Mode** is created once from the current desktop
-settings the first time this version starts. It is stored as a normal user
-theme, so later changes can be captured with **Save** without overwriting the
-original first-run capture automatically.
+provided by Haiku. **Dark Mode** is a read-only theme compiled into the
+application from the supplied Haiku configuration and screenshot. It does not
+depend on a theme already being present in the user's settings directory.
 
 ## Heritage and licence
 

@@ -9,6 +9,8 @@
 
 #include <Bitmap.h>
 #include <BitmapStream.h>
+#include <Application.h>
+#include <DataIO.h>
 #include <Debug.h>
 #include <Directory.h>
 #include <Entry.h>
@@ -16,6 +18,8 @@
 #include <FindDirectory.h>
 #include <Message.h>
 #include <Path.h>
+#include <Resources.h>
+#include <Roster.h>
 #include <StorageDefs.h>
 #include <String.h>
 #include <TranslationUtils.h>
@@ -38,6 +42,13 @@
 #include "DumpMessage.h"
 
 extern status_t MakeScreenshot(BBitmap **here);
+
+static const type_code kBuiltInThemeResourceType = 'HTHM';
+static const type_code kPngResourceType = 'PNG ';
+static const char *kBuiltInThemeField = "htm:built_in_theme";
+static const char *kDarkModeIdentifier = "dark_mode";
+static const char *kDarkModeThemeResource = "dark_mode_theme";
+static const char *kDarkModeScreenshotResource = "dark_mode_screenshot";
 
 //#define DEBUG_TM
 #ifdef DEBUG_TM
@@ -469,6 +480,10 @@ status_t
 ThemeManager::LoadThemes()
 {
 	FENTRY;
+	status_t built_in_error = LoadBuiltInThemes();
+	if (built_in_error != B_OK && built_in_error != B_NAME_NOT_FOUND)
+		return built_in_error;
+
 	directory_which dirs[] = {
 #ifdef __HAIKU__
 		/* find system settings dir */
@@ -525,16 +540,66 @@ ThemeManager::LoadThemes()
 
 
 status_t
+ThemeManager::LoadBuiltInThemes()
+{
+	if (FindTheme("Dark Mode") >= 0)
+		return B_OK;
+
+	app_info application_info;
+	status_t err = be_app->GetAppInfo(&application_info);
+	if (err != B_OK)
+		return err;
+
+	BFile application_file(&application_info.ref, B_READ_ONLY);
+	if (application_file.InitCheck() != B_OK)
+		return application_file.InitCheck();
+
+	BResources resources;
+	err = resources.SetTo(&application_file, false);
+	if (err != B_OK)
+		return err;
+
+	size_t resource_size = 0;
+	const void *resource_data = resources.LoadResource(kBuiltInThemeResourceType,
+		kDarkModeThemeResource, &resource_size);
+	if (resource_data == NULL || resource_size == 0)
+		return B_NAME_NOT_FOUND;
+
+	BMemoryIO theme_stream(resource_data, resource_size);
+	BMessage *theme = NULL;
+	err = ParseMessageFromStream(&theme, theme_stream);
+	if (err != B_OK)
+		return err;
+	if (theme == NULL)
+		return B_BAD_DATA;
+
+	err = theme->AddString(kBuiltInThemeField, kDarkModeIdentifier);
+	if (err != B_OK) {
+		delete theme;
+		return err;
+	}
+
+	fThemeList.AddItem(theme);
+	return B_OK;
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
+status_t
 ThemeManager::AddTheme(BMessage *theme)
 {
 	FENTRY;
 	BString name;
+	BMessage information;
 
 	if (!theme)
 		return EINVAL;
-/*	err = ThemeName(*theme, name);
-	if (err)
-		return err;*/
+	status_t err = theme->FindMessage(Z_THEME_INFO_MESSAGE, &information);
+	if (err != B_OK)
+		return err;
+	err = information.FindString(Z_THEME_NAME, &name);
+	if (err != B_OK)
+		return err;
 	if (FindTheme(name.String()) >= 0)
 		return B_FILE_EXISTS;
 	fThemeList.AddItem(theme);
@@ -1054,7 +1119,7 @@ ThemeManager::LoadTheme(const char *path, BMessage **to)
 	err = theme->AddString(Z_THEME_LOCATION, path);
 	//theme->PrintToStream();
 	err = AddTheme(theme);
-	if (err)
+	if (err && err != B_FILE_EXISTS)
 		fprintf(stderr, "ThemeManager:: AddTheme 0x%08lx\n", err);
 	if (err)
 		delete theme;
@@ -1285,6 +1350,29 @@ ThemeManager::ThemeScreenShot(int32 id, BBitmap **copyto)
 	
 	if (!copyto)
 		return EINVAL;
+	BString built_in_identifier;
+	if (theme->FindString(kBuiltInThemeField, &built_in_identifier) == B_OK
+		&& built_in_identifier == kDarkModeIdentifier) {
+		app_info application_info;
+		err = be_app->GetAppInfo(&application_info);
+		if (err != B_OK)
+			return err;
+		BFile application_file(&application_info.ref, B_READ_ONLY);
+		if (application_file.InitCheck() != B_OK)
+			return application_file.InitCheck();
+		BResources resources;
+		err = resources.SetTo(&application_file, false);
+		if (err != B_OK)
+			return err;
+		size_t resource_size = 0;
+		const void *resource_data = resources.LoadResource(kPngResourceType,
+			kDarkModeScreenshotResource, &resource_size);
+		if (resource_data == NULL || resource_size == 0)
+			return B_NAME_NOT_FOUND;
+		BMemoryIO screenshot_stream(resource_data, resource_size);
+		*copyto = BTranslationUtils::GetBitmap(&screenshot_stream);
+		return *copyto != NULL ? B_OK : B_BAD_DATA;
+	}
 	err = theme->FindMessage(Z_THEME_INFO_MESSAGE, &msg);
 	if (err)
 		return err;

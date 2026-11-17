@@ -50,6 +50,7 @@ DEBUGGER :=
 COMPILER_FLAGS := -std=c++17
 LINKER_FLAGS :=
 APP_VERSION :=
+EXTRA_DEPS := resources/DarkMode.theme resources/DarkMode.png
 DRIVER_PATH :=
 OBJ_DIR :=
 TARGET_DIR :=
