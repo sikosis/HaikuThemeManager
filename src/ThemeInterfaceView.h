@@ -49,6 +49,7 @@ public:
 		status_t			ThemeSelected();
 		
 		void				SetIsRevertable();
+		void				SetSelectionControls(bool hasTheme, bool isWritable);
 		void				SetScreenshot(BBitmap *shot);
 		status_t			AError(const char *func, status_t err);
 

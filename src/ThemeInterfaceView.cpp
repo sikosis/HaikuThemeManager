@@ -578,6 +578,7 @@ ThemeInterfaceView::_ThemeListPopulator()
 		if (c)
 			c->SetEnabled(true);
 	}
+	SetSelectionControls(false, false);
 	UnlockLooper();
 }
 
@@ -691,16 +692,31 @@ ThemeInterfaceView::SaveSelected()
 	ThemeManager* tman = GetThemeManager();
 	int32 id;
 	ThemeItem *item;
-	BMessage theme;
+	BString message;
 	// find selected theme
 	id = fThemeList->CurrentSelection(0);
-	if (id < 0)
-		return B_OK;
+	if (id < 0) {
+		BAlert *alert = new BAlert("save theme", B_TRANSLATE(
+			"Select a user theme before saving the current settings."),
+			B_TRANSLATE("OK"));
+		alert->Go();
+		return B_BAD_VALUE;
+	}
 	item = dynamic_cast<ThemeItem *>(fThemeList->ItemAt(id));
-	if (!item)
-		return AError(__FUNCTION__, ENOENT);
-	if (item->IsReadOnly())
-		return AError(__FUNCTION__, B_READ_ONLY_DEVICE);
+	if (!item) {
+		BAlert *alert = new BAlert("save theme", B_TRANSLATE(
+			"The selected row is a heading. Select a user theme to save."),
+			B_TRANSLATE("OK"));
+		alert->Go();
+		return B_BAD_VALUE;
+	}
+	if (item->IsReadOnly()) {
+		BAlert *alert = new BAlert("save theme", B_TRANSLATE(
+			"System and imported themes are read-only. Create a new theme first."),
+			B_TRANSLATE("OK"));
+		alert->Go();
+		return B_READ_ONLY_DEVICE;
+	}
 	id = item->ThemeId();
 	if (id < 0)
 		return AError(__FUNCTION__, ENOENT);
@@ -711,8 +727,12 @@ ThemeInterfaceView::SaveSelected()
 	err = tman->SaveTheme(id);
 	if (err)
 		return AError(__FUNCTION__, err);
-	//err = tman->ApplyTheme(theme);
-	return err;
+
+	message.SetToFormat(B_TRANSLATE("The current settings were saved to “%s”."),
+		item->Text());
+	BAlert *alert = new BAlert("theme saved", message.String(), B_TRANSLATE("OK"));
+	alert->Go();
+	return B_OK;
 }
 
 
@@ -793,6 +813,7 @@ ThemeInterfaceView::ThemeSelected()
 	id = fThemeList->CurrentSelection(0);
 	if (id < 0)
 	{
+		SetSelectionControls(false, false);
 		fScreenshotPane->ClearViewBitmap();
 		fScreenshotPane->Invalidate(fScreenshotPane->Bounds());
 		
@@ -805,11 +826,16 @@ ThemeInterfaceView::ThemeSelected()
 	}
 	
 	item = dynamic_cast<ThemeItem *>(fThemeList->ItemAt(id));
-	if (!item)
+	if (!item) {
+		SetSelectionControls(false, false);
 		return ENOENT;
+	}
 	id = item->ThemeId();
-	if (id < 0)
+	if (id < 0) {
+		SetSelectionControls(false, false);
 		return ENOENT;
+	}
+	SetSelectionControls(true, !item->IsReadOnly());
 
 	if (tman->ThemeName(id, name) == B_OK)
 		details << name << "\n\n";
@@ -851,6 +877,17 @@ ThemeInterfaceView::SetIsRevertable()
 	BMessenger msgr(Parent());
 	msgr.SendMessage(B_PREF_APP_ENABLE_REVERT);
 }
+
+
+void
+ThemeInterfaceView::SetSelectionControls(bool hasTheme, bool isWritable)
+{
+	fApplyBtn->SetEnabled(hasTheme);
+	fSaveBtn->SetEnabled(hasTheme && isWritable);
+	fDeleteBtn->SetEnabled(hasTheme && isWritable);
+	fSetShotBtn->SetEnabled(hasTheme && isWritable);
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
 
 
 void
