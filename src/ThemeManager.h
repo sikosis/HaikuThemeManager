@@ -17,6 +17,8 @@
 
 /* backup of current settings when applying a theme */
 #define THEME_ID_BACKUP -1
+/* synthetic theme that asks each add-on to restore its Haiku defaults */
+#define THEME_ID_DEFAULT -2
 
 namespace Z {
 namespace ThemeManager {

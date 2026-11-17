@@ -37,6 +37,14 @@ Theme Manager stores its preferences in
 settings hierarchy. Existing settings and themes remain compatible with the
 historical application.
 
+## Included themes
+
+**Default** is a read-only system theme that restores the standard values
+provided by Haiku. **Dark Mode** is created once from the current desktop
+settings the first time this version starts. It is stored as a normal user
+theme, so later changes can be captured with **Save** without overwriting the
+original first-run capture automatically.
+
 ## Heritage and licence
 
 Theme Manager was created by Francois Revol and distributed under the MIT

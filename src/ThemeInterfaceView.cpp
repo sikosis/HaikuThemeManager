@@ -505,6 +505,17 @@ ThemeInterfaceView::_ThemeListPopulator()
 
 	ThemeManager* tman = GetThemeManager();
 	tman->LoadThemes();
+	if (tman->FindTheme("Dark Mode") < 0) {
+		int32 dark_mode_id = tman->MakeTheme();
+		if (dark_mode_id >= 0
+			&& tman->SetThemeName(dark_mode_id, "Dark Mode") == B_OK
+			&& tman->SetThemeDescription(dark_mode_id,
+				"The Haiku settings captured when Dark Mode was first created.") == B_OK
+			&& tman->SetThemeKeywords(dark_mode_id,
+				"Haiku, dark, current settings") == B_OK) {
+			tman->SaveTheme(dark_mode_id, true);
+		}
+	}
 
 	count = tman->CountThemes();
 	
@@ -514,6 +525,8 @@ ThemeInterfaceView::_ThemeListPopulator()
 	si = new BStringItem("(System themes)");
 	si->SetEnabled(false);
 	fThemeList->AddItem(si);
+	ti = new ThemeItem(THEME_ID_DEFAULT, "Default", true);
+	fThemeList->AddItem(ti);
 	si = NULL; // first non-readonly item will set it again
 
 	// native themes
@@ -647,6 +660,8 @@ ThemeInterfaceView::ApplySelected()
 	if (!item)
 		return ENOENT;
 	id = item->ThemeId();
+	if (id == THEME_ID_DEFAULT)
+		return ApplyDefaults();
 	if (id < 0)
 		return ENOENT;
 	SetIsRevertable();
@@ -844,6 +859,16 @@ ThemeInterfaceView::ThemeSelected()
 		return ENOENT;
 	}
 	id = item->ThemeId();
+	if (id == THEME_ID_DEFAULT) {
+		SetSelectionControls(true, false);
+		SetScreenshot(NULL);
+		while (fScreenshotText->IsHidden())
+			fScreenshotText->Show();
+		fScreenshotText->SetText(B_TRANSLATE("Haiku defaults"));
+		fDetails->SetText(B_TRANSLATE(
+			"Default\n\nRestores the standard settings supplied by Haiku."));
+		return B_OK;
+	}
 	if (id < 0) {
 		SetSelectionControls(false, false);
 		return ENOENT;
